@@ -1,4 +1,6 @@
-from collections import defaultdict
+'''
+Original Algorithm Implementation
+'''
 
 # Test Case #1 from Instructions
 reference_trajectory_dict = {
@@ -9,6 +11,17 @@ reference_trajectory_dict = {
     "E":3
 }
 
+# Test Case #2 from Instructions
+# TODO: DEBUG (Nonworking)
+reference_trajectory_dict = {
+    "C":1,
+    "D":2,
+    "G":3,
+    "F":2,
+    "E":0
+}
+
+# Print out the Original Reference Trajectory
 print(f"Original Reference Trajectory: {reference_trajectory_dict}\n")
 
 '''
@@ -46,36 +59,50 @@ def sort_reference_notes(array,dict,empty_dict):
 
 # Print the sorted notes along with their corresponding trajectories
 sorted_notes = sort_reference_notes(sorted_trajs, reference_trajectory_dict,sorted_note_dict)
-print(sorted_notes)
+print(f"Notes after Sorting: {sorted_notes}\n")
 
 variation_trajectory = [0.5,-1,2,3,4]
 
-index_added_number = 0
-variation_number_list = []
+'''
+Check the numbers in the reference directory against the variation trajectory
+and varies it by taking the number to the right of it and assigning the note
+associated with that reference value to the variation
+if the number in the reference trajectory is less than the variation trajectory number
+'''
+def variation_sorting(trajectory, note_dict):
+    index_added_number = 0
+    variation_number_list = []
 
-# Find the values of trajectory values 
-for num_index, num in enumerate(variation_trajectory):
-    for value_index, value in enumerate(list(sorted_notes.values())[::-1]):
-        if (num <= value):
-            index_added_number = (list(sorted_notes.values())[::-1])[-1]
-        else:
-            # Catch out of bound indeces because index-1 doesn't return error
-            if (list(sorted_notes.values())[::-1])[value_index-1] == (list(sorted_notes.values())[::-1])[-1]:
-                index_added_number = (list(sorted_notes.values())[::-1])[0]
+    # Find the values of trajectory values 
+    for num_index, num in enumerate(trajectory):
+        for value_index, value in enumerate(list(note_dict.values())[::-1]):
+            if (num <= value):
+                index_added_number = (list(note_dict.values())[::-1])[-1]
+            else:
+                # Catch out of bound indeces because index-1 doesn't return error
+                if (list(note_dict.values())[::-1])[value_index-1] == (list(note_dict.values())[::-1])[-1]:
+                    index_added_number = (list(note_dict.values())[::-1])[0]
+                    break
+                index_added_number = (list(note_dict.values())[::-1])[value_index-1]
                 break
-            index_added_number = (list(sorted_notes.values())[::-1])[value_index-1]
-            break
-    variation_number_list.append(index_added_number)
+        variation_number_list.append(index_added_number)
+    return variation_number_list
 
-variation_notes = []
+variation_sorting = variation_sorting(variation_trajectory, sorted_notes)
 
-# For each trajectory value
-for i in variation_number_list:
-    # For each note
-    for k in sorted_notes.keys():
-        # If the trajectory value of the note is equal to the trajectory value found in the sorted array
-        if sorted_notes[k] == i:
-            variation_notes.append(k)
-            break
+'''
+Align the Varied Sorted Trajectories along with their respective notes
+'''
+def variation_note_alignment(variation_sort, note_dict):
+    variation_notes = []
+    # For each trajectory value
+    for varied_traj in variation_sort:
+        # For each note
+        for note in note_dict.keys():
+            # If the trajectory value of the note is equal to the trajectory value found in the sorted array
+            if note_dict[note] == varied_traj:
+                variation_notes.append(note)
+                break
+    return variation_notes
 
-print(variation_notes)
+print(f"Notes after the variation trajectory sorting: {variation_note_alignment(variation_sorting, sorted_notes)}")
