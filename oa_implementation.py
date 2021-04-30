@@ -38,8 +38,28 @@ def oa_sort(array):
                 array[compare], array[compared_to] = array[compared_to], array[compare]
     return array
 
+'''
+Use bubble sort algorithm to sort
+'''
+def bubble_sort(array):
+    length = len(array)
+  
+    # Traverse through all array elements
+    for i in range(length-1):
+    # range(n) also work but outer loop will repeat one time more than needed.
+  
+        # Last i elements are already in place
+        for j in range(0, length-i-1):
+  
+            # traverse the array from 0 to n-i-1
+            # Swap if the element found is greater
+            # than the next element
+            if array[j] > array[j+1] :
+                array[j], array[j+1] = array[j+1], array[j]
+
 # Sort the trajectory value
-sorted_trajs = oa_sort(list(reference_trajectory_dict.values())) # Sort the values
+#sorted_trajs = oa_sort(list(reference_trajectory_dict.values())) # Sort the values using original algorithm sort
+sorted_trajs = oa_sort(list(reference_trajectory_dict.values())) # Sort the values using bubble sort
 sorted_note_dict = {}
 
 ''' 
